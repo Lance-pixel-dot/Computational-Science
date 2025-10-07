@@ -2,10 +2,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
-# Parameters from your tables
-P0 = 200         # initial population
-r = 0.4          # growth rate
-t0, tf = 0, 9    # time range in seconds
+# Parameters 
+P0 = 200         
+r = 0.4          
+t0, tf = 0, 9    
 
 # Exact analytical solution
 t_exact = np.linspace(t0, tf, 400)
@@ -24,7 +24,7 @@ for t_vals, h in zip(t_arrays, h_values):
         P_vals[i] = P_vals[i-1] + h * r * P_vals[i-1]
     P_euler.append(P_vals)
 
-# --- PLOTTING SETUP ---
+
 fig, ax = plt.subplots(figsize=(9, 6))
 ax.set_xlim(t0, tf)
 ax.set_ylim(0, max(P_exact) * 1.1)
@@ -45,26 +45,26 @@ label_h01 = ax.text(0, 0, '', color='purple', fontsize=9, weight='bold')
 
 ax.legend(loc="upper left")
 
-# --- ANIMATION FUNCTION ---
+# Animation Function
 def update(frame):
-    # Progress fraction (used for synchronizing lengths)
+   
     frac = frame / len(t_exact)
 
-    # Exact solution update
+    # Exact solution 
     n_exact = int(frac * len(t_exact))
     line_exact.set_data(t_exact[:n_exact], P_exact[:n_exact])
     if n_exact > 0:
         label_exact.set_position((t_exact[n_exact-1], P_exact[n_exact-1]))
         label_exact.set_text(f"Exact: {P_exact[n_exact-1]:.0f}")
 
-    # Euler (h=0.5)
+    # 0.5
     n_h05 = int(frac * len(t_arrays[0]))
     line_h05.set_data(t_arrays[0][:n_h05], P_euler[0][:n_h05])
     if n_h05 > 0:
         label_h05.set_position((t_arrays[0][n_h05-1], P_euler[0][n_h05-1]))
         label_h05.set_text(f"0.5s: {P_euler[0][n_h05-1]:.0f}")
 
-    # Euler (h=0.1)
+    # 0.1
     n_h01 = int(frac * len(t_arrays[1]))
     line_h01.set_data(t_arrays[1][:n_h01], P_euler[1][:n_h01])
     if n_h01 > 0:
@@ -73,7 +73,7 @@ def update(frame):
 
     return line_exact, line_h05, line_h01, label_exact, label_h05, label_h01
 
-# --- ANIMATION CONTROL ---
+
 ani = FuncAnimation(
     fig, update, frames=len(t_exact),
     interval=35, blit=True, repeat=True
